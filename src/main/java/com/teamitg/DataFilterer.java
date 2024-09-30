@@ -11,6 +11,30 @@ import java.util.List;
 public class DataFilterer {
 
   public static List<RequestLog> filterByCountry(Reader source, String country) {
+    try {
+      List<RequestLog> requestLogs = readLog(source);
+      return requestLogs.stream()
+              .filter(responseLog -> responseLog.getCountryCode().equals(country))
+              .toList();
+    } catch (IOException e) {
+      System.err.println("Error reading log file: " + e.getMessage());
+      return Collections.emptyList();
+    }
+  }
+
+  public static List<RequestLog> filterByCountryWithResponseTimeAboveLimit(Reader source, String country, long limit) {
+
+
+    return List.of();
+  }
+
+  public static List<RequestLog> filterByResponseTimeAboveAverage(Reader source)
+
+  {
+    return List.of();
+  }
+
+  public static List<RequestLog> readLog(Reader source) throws IOException {
     List<RequestLog> requestLogs = new ArrayList<>();
 
     try (BufferedReader reader = new BufferedReader(source)) {
@@ -40,27 +64,7 @@ public class DataFilterer {
         );
         requestLogs.add(requestLog);
       }
-
-      return requestLogs.stream()
-
-              .filter(responseLog -> responseLog.getCountryCode().equals(country))
-              .toList();
-    } catch (IOException e) {
-        System.err.println("Error: " + e.getMessage());
-        return Collections.emptyList();
     }
-
-  }
-
-  public static List<RequestLog> filterByCountryWithResponseTimeAboveLimit(Reader source, String country, long limit) {
-
-
-    return List.of();
-  }
-
-  public static List<RequestLog> filterByResponseTimeAboveAverage(Reader source)
-
-  {
-    return List.of();
+    return requestLogs;
   }
 }
