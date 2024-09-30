@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.List;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class DataFiltererTest {
     assertTrue(DataFilterer.filterByCountry(openFile(INVALID_FILE), MATCHED_COUNTRY_GB).isEmpty());
   }
 
-  @Test @Disabled
+  @Test
   void shouldReturnMatchedResults_WhenCountryIsFound() throws FileNotFoundException {
     assertTrue(!DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US).isEmpty() &&
             DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US)
@@ -30,11 +31,15 @@ class DataFiltererTest {
                     .allMatch(log -> MATCHED_COUNTRY_US.equalsIgnoreCase(log.getCountryCode())));
   }
 
-  @Test @Disabled
-  void shouldReturnEmptyList_WhenCountryNotFound() { }
+  @Test
+  void shouldReturnEmptyList_WhenCountryNotFound() throws FileNotFoundException {
+    assertTrue(DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), UNMATCHED_COUNTRY_SG).isEmpty());
+  }
 
   @Test @Disabled
-  void shouldReturnMatchedResults_WithLowerResponseTime() { }
+  void shouldReturnMatchedResults_WithLowerResponseTime() {
+
+  }
 
   @Test @Disabled
   void shouldReturnMatchedResults_WithHigherResponseTime() { }
@@ -51,7 +56,7 @@ class DataFiltererTest {
 
   private static final String MATCHED_COUNTRY_US = "US";
   private static final String MATCHED_COUNTRY_GB = "GB";
-  private static final String UNMATCHED_COUNTRY = "SG";
+  private static final String UNMATCHED_COUNTRY_SG = "SG";
 
   private static final long MATCHED_RESPONSE_TIME = 200;
   private static final long UNMATCHED_RESPONSE_TIME = 1000;
