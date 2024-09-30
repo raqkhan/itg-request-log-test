@@ -25,8 +25,8 @@ class DataFiltererTest {
 
   @Test
   void shouldReturnMatchedResults_WhenCountryIsFound() throws FileNotFoundException {
-    List<RequestLog> requestLog = DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US);
-    assertCountryFound(requestLog, MATCHED_COUNTRY_US);
+    List<RequestLog> requestLog = DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_GB);
+    assertCountryFound(requestLog, MATCHED_COUNTRY_GB);
   }
 
   @Test
