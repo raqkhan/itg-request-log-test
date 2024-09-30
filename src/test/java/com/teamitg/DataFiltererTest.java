@@ -25,10 +25,8 @@ class DataFiltererTest {
 
   @Test
   void shouldReturnMatchedResults_WhenCountryIsFound() throws FileNotFoundException {
-    assertTrue(!DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US).isEmpty() &&
-            DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US)
-                    .stream()
-                    .allMatch(log -> MATCHED_COUNTRY_US.equalsIgnoreCase(log.getCountryCode())));
+    List<RequestLog> requestLog = DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US);
+    assertCountryFound(requestLog, MATCHED_COUNTRY_US);
   }
 
   @Test
@@ -36,9 +34,16 @@ class DataFiltererTest {
     assertTrue(DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), UNMATCHED_COUNTRY_SG).isEmpty());
   }
 
-  @Test @Disabled
-  void shouldReturnMatchedResults_WithLowerResponseTime() {
-
+  @Test
+  void shouldReturnMatchedResults_WithLowerResponseTime() throws FileNotFoundException {
+    List<RequestLog> requestLog = DataFilterer
+            .filterByCountryWithResponseTimeAboveLimit(openFile(MULTI_LINE_FILE),
+                    MATCHED_COUNTRY_US, MATCHED_RESPONSE_TIME);
+    assertCountryFound(requestLog, MATCHED_COUNTRY_US);
+    assertTrue(!requestLog.isEmpty() &&
+            requestLog
+                    .stream()
+                    .allMatch(log -> log.getResponseTime() > MATCHED_RESPONSE_TIME));
   }
 
   @Test @Disabled
@@ -46,6 +51,17 @@ class DataFiltererTest {
 
   @Test @Disabled
   void shouldReturnList_WithResponseTimeAboveAverage() { }
+
+  void assertCountryFound(List<RequestLog> requestLog, String matchedCountry) {
+    assertTrue(!requestLog.isEmpty() &&
+            requestLog
+                    .stream()
+                    .allMatch(log -> matchedCountry.equalsIgnoreCase(log.getCountryCode())));
+  }
+
+  private FileReader openFile(String filename) throws FileNotFoundException {
+    return new FileReader(filename);
+  }
 
   // Constants
   private static final String EMPTY_FILE = "src/test/resources/empty";
@@ -60,8 +76,4 @@ class DataFiltererTest {
 
   private static final long MATCHED_RESPONSE_TIME = 200;
   private static final long UNMATCHED_RESPONSE_TIME = 1000;
-
-  private FileReader openFile(String filename) throws FileNotFoundException {
-    return new FileReader(filename);
-  }
 }
