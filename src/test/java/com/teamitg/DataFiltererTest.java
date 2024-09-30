@@ -14,19 +14,18 @@ class DataFiltererTest {
 
   @Test
   void shouldReturnEmptyList_WhenLogFileIsEmpty() throws FileNotFoundException {
-    assertTrue(DataFilterer.filterByCountry(openFile("src/test/resources/empty"), "GB").isEmpty());
+    assertTrue(DataFilterer.filterByCountry(openFile(EMPTY_FILE), MATCHED_COUNTRY_GB).isEmpty());
   }
 
   @Test
   void shouldReturnEmptyList_WhenLogFileIsInvalid() throws FileNotFoundException {
-    assertTrue(!DataFilterer.filterByCountry(openFile("src/test/resources/empty"), "GB").isEmpty() &&
-            DataFilterer.filterByCountry(openFile("src/test/resources/empty"), "GB")
-                    .stream()
-                    .allMatch(log -> "GB".equalsIgnoreCase(log.getCountryCode())));
+    assertTrue(DataFilterer.filterByCountry(openFile(INVALID_FILE), MATCHED_COUNTRY_GB).isEmpty());
   }
 
   @Test @Disabled
-  void shouldReturnMatchedResults_WhenCountryIsFound() { }
+  void shouldReturnMatchedResults_WhenCountryIsFound() {
+
+  }
 
   @Test @Disabled
   void shouldReturnEmptyList_WhenCountryNotFound() { }
@@ -40,7 +39,19 @@ class DataFiltererTest {
   @Test @Disabled
   void shouldReturnList_WithResponseTimeAboveAverage() { }
 
+  // Constants
+  private static final String EMPTY_FILE = "src/test/resources/empty";
+  private static final String INVALID_FILE = "src/test/resources/invalid";
+  private static final String MULTI_LINE_FILE = "src/test/resources/multi-lines";
+  private static final String FILE_NOT_FOUND = "src/test/resources/not-found";
+  private static final String SINGLE_LINE_FILE = "src/test/resources/single-line";
 
+  private static final String MATCHED_COUNTRY_US = "US";
+  private static final String MATCHED_COUNTRY_GB = "GB";
+  private static final String UNMATCHED_COUNTRY = "SG";
+
+  private static final long MATCHED_RESPONSE_TIME = 200;
+  private static final long UNMATCHED_RESPONSE_TIME = 1000;
 
   private FileReader openFile(String filename) throws FileNotFoundException {
     return new FileReader(filename);
