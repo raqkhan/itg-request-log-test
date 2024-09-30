@@ -5,15 +5,15 @@ import java.util.List;
 
 public class DataFilterer {
 
-  public static List<?> filterByCountry(Reader source, String country) {
+  public static List<RequestLog> filterByCountry(Reader source, String country) {
     return List.of();
   }
 
-  public static List<?> filterByCountryWithResponseTimeAboveLimit(Reader source, String country, long limit) {
+  public static List<RequestLog> filterByCountryWithResponseTimeAboveLimit(Reader source, String country, long limit) {
     return List.of();
   }
 
-  public static List<?> filterByResponseTimeAboveAverage(Reader source) {
+  public static List<RequestLog> filterByResponseTimeAboveAverage(Reader source) {
     return List.of();
   }
 }

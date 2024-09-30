@@ -17,8 +17,13 @@ class DataFiltererTest {
     assertTrue(DataFilterer.filterByCountry(openFile("src/test/resources/empty"), "GB").isEmpty());
   }
 
-  @Test @Disabled
-  void shouldReturnEmptyList_WhenLogFileIsInvalid() {  }
+  @Test
+  void shouldReturnEmptyList_WhenLogFileIsInvalid() throws FileNotFoundException {
+    assertTrue(!DataFilterer.filterByCountry(openFile("src/test/resources/empty"), "GB").isEmpty() &&
+            DataFilterer.filterByCountry(openFile("src/test/resources/empty"), "GB")
+                    .stream()
+                    .allMatch(log -> "GB".equalsIgnoreCase(log.getCountryCode())));
+  }
 
   @Test @Disabled
   void shouldReturnMatchedResults_WhenCountryIsFound() { }
