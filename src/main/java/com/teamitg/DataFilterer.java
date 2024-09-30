@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DataFilterer {
 
@@ -15,7 +16,7 @@ public class DataFilterer {
       List<RequestLog> requestLogs = readLog(source);
       return requestLogs.stream()
               .filter(responseLog -> responseLog.getCountryCode().equals(country))
-              .toList();
+              .collect(Collectors.toList());
     } catch (IOException e) {
       System.err.println("Error reading log file: " + e.getMessage());
       return Collections.emptyList();
@@ -23,9 +24,16 @@ public class DataFilterer {
   }
 
   public static List<RequestLog> filterByCountryWithResponseTimeAboveLimit(Reader source, String country, long limit) {
-
-
-    return List.of();
+    try {
+      List<RequestLog> responseLogs = readLog(source);
+      return responseLogs.stream()
+              .filter(responseLog -> responseLog.getCountryCode().equals(country) &&
+                      responseLog.getResponseTime() > limit)
+              .collect(Collectors.toList());
+    } catch (IOException e) {
+      System.err.println("Error reading log file: " + e.getMessage());
+      return Collections.emptyList();
+    }
   }
 
   public static List<RequestLog> filterByResponseTimeAboveAverage(Reader source)
