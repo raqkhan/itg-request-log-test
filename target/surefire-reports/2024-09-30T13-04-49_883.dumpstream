@@ -1,5 +1,0 @@
-# Created at 2024-09-30T13:04:50.138
-Boot Manifest-JAR contains absolute paths in classpath 'D:\ITG\itg-request-log-test\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-
