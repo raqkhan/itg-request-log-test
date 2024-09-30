@@ -23,8 +23,11 @@ class DataFiltererTest {
   }
 
   @Test @Disabled
-  void shouldReturnMatchedResults_WhenCountryIsFound() {
-
+  void shouldReturnMatchedResults_WhenCountryIsFound() throws FileNotFoundException {
+    assertTrue(!DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US).isEmpty() &&
+            DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US)
+                    .stream()
+                    .allMatch(log -> MATCHED_COUNTRY_US.equalsIgnoreCase(log.getCountryCode())));
   }
 
   @Test @Disabled
