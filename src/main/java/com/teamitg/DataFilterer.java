@@ -37,9 +37,22 @@ public class DataFilterer {
   }
 
   public static List<RequestLog> filterByResponseTimeAboveAverage(Reader source)
-
   {
-    return List.of();
+    try {
+      List<RequestLog> responseLogs = readLog(source);
+
+      double averageResponseTime = responseLogs.stream()
+              .mapToDouble(RequestLog::getResponseTime)
+              .average()
+              .orElse(0.0);
+
+      return responseLogs.stream()
+              .filter(responseLog -> responseLog.getResponseTime() > averageResponseTime)
+              .collect(Collectors.toList());
+    } catch (IOException e) {
+      System.err.println("Error reading log file: " + e.getMessage());
+      return Collections.emptyList();
+    }
   }
 
   public static List<RequestLog> readLog(Reader source) throws IOException {
