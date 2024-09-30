@@ -46,11 +46,25 @@ class DataFiltererTest {
                     .allMatch(log -> log.getResponseTime() > MATCHED_RESPONSE_TIME));
   }
 
-  @Test @Disabled
-  void shouldReturnMatchedResults_WithHigherResponseTime() { }
+  @Test
+  void shouldReturnMatchedResults_WithHigherResponseTime() throws FileNotFoundException {
+    assertTrue(DataFilterer
+            .filterByCountryWithResponseTimeAboveLimit(openFile(MULTI_LINE_FILE),
+                    MATCHED_COUNTRY_US, UNMATCHED_RESPONSE_TIME)
+            .isEmpty());
+  }
 
-  @Test @Disabled
-  void shouldReturnList_WithResponseTimeAboveAverage() { }
+  @Test
+  void shouldReturnList_WithResponseTimeAboveAverage() throws FileNotFoundException {
+    double averageResponseTime = 526;
+
+    List<RequestLog> requestLog = DataFilterer.filterByResponseTimeAboveAverage(openFile(MULTI_LINE_FILE));
+
+    assertTrue(!requestLog.isEmpty() &&
+            requestLog
+                    .stream()
+                    .allMatch(log -> log.getResponseTime() > averageResponseTime));
+  }
 
   void assertCountryFound(List<RequestLog> requestLog, String matchedCountry) {
     assertTrue(!requestLog.isEmpty() &&
