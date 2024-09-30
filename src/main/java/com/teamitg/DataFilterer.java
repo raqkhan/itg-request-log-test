@@ -15,40 +15,40 @@ public class DataFilterer {
     try {
       List<RequestLog> requestLogs = readLog(source);
       return requestLogs.stream()
-              .filter(responseLog -> responseLog.getCountryCode().equals(country))
-              .collect(Collectors.toList());
+          .filter(responseLog -> responseLog.getCountryCode().equals(country))
+          .collect(Collectors.toList());
     } catch (IOException e) {
       System.err.println("Error reading log file: " + e.getMessage());
       return Collections.emptyList();
     }
   }
 
-  public static List<RequestLog> filterByCountryWithResponseTimeAboveLimit(Reader source, String country, long limit) {
+  public static List<RequestLog> filterByCountryWithResponseTimeAboveLimit(
+      Reader source, String country, long limit) {
     try {
       List<RequestLog> responseLogs = readLog(source);
       return responseLogs.stream()
-              .filter(responseLog -> responseLog.getCountryCode().equals(country) &&
-                      responseLog.getResponseTime() > limit)
-              .collect(Collectors.toList());
+          .filter(
+              responseLog ->
+                  responseLog.getCountryCode().equals(country)
+                      && responseLog.getResponseTime() > limit)
+          .collect(Collectors.toList());
     } catch (IOException e) {
       System.err.println("Error reading log file: " + e.getMessage());
       return Collections.emptyList();
     }
   }
 
-  public static List<RequestLog> filterByResponseTimeAboveAverage(Reader source)
-  {
+  public static List<RequestLog> filterByResponseTimeAboveAverage(Reader source) {
     try {
       List<RequestLog> responseLogs = readLog(source);
 
-      double averageResponseTime = responseLogs.stream()
-              .mapToDouble(RequestLog::getResponseTime)
-              .average()
-              .orElse(0.0);
+      double averageResponseTime =
+          responseLogs.stream().mapToDouble(RequestLog::getResponseTime).average().orElse(0.0);
 
       return responseLogs.stream()
-              .filter(responseLog -> responseLog.getResponseTime() > averageResponseTime)
-              .collect(Collectors.toList());
+          .filter(responseLog -> responseLog.getResponseTime() > averageResponseTime)
+          .collect(Collectors.toList());
     } catch (IOException e) {
       System.err.println("Error reading log file: " + e.getMessage());
       return Collections.emptyList();
@@ -78,11 +78,8 @@ public class DataFilterer {
         String countryCode = fields[1];
         long responseTime = Long.parseLong(fields[2]);
 
-        RequestLog requestLog = new RequestLog(
-                Instant.ofEpochSecond(timestamp),
-                countryCode,
-                responseTime
-        );
+        RequestLog requestLog =
+            new RequestLog(Instant.ofEpochSecond(timestamp), countryCode, responseTime);
         requestLogs.add(requestLog);
       }
     }

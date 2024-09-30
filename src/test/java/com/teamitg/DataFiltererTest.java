@@ -1,15 +1,11 @@
 package com.teamitg;
 
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
-
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
 
 class DataFiltererTest {
 
@@ -25,32 +21,33 @@ class DataFiltererTest {
 
   @Test
   void shouldReturnMatchedResults_WhenCountryIsFound() throws FileNotFoundException {
-    List<RequestLog> requestLog = DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_GB);
+    List<RequestLog> requestLog =
+        DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_GB);
     assertCountryFound(requestLog, MATCHED_COUNTRY_GB);
   }
 
   @Test
   void shouldReturnEmptyList_WhenCountryNotFound() throws FileNotFoundException {
-    assertTrue(DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), UNMATCHED_COUNTRY_SG).isEmpty());
+    assertTrue(
+        DataFilterer.filterByCountry(openFile(MULTI_LINE_FILE), UNMATCHED_COUNTRY_SG).isEmpty());
   }
 
   @Test
   void shouldReturnMatchedResults_WithLowerResponseTime() throws FileNotFoundException {
-    List<RequestLog> requestLog = DataFilterer
-            .filterByCountryWithResponseTimeAboveLimit(openFile(MULTI_LINE_FILE),
-                    MATCHED_COUNTRY_US, MATCHED_RESPONSE_TIME);
+    List<RequestLog> requestLog =
+        DataFilterer.filterByCountryWithResponseTimeAboveLimit(
+            openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US, MATCHED_RESPONSE_TIME);
     assertCountryFound(requestLog, MATCHED_COUNTRY_US);
-    assertTrue(!requestLog.isEmpty() &&
-            requestLog
-                    .stream()
-                    .allMatch(log -> log.getResponseTime() > MATCHED_RESPONSE_TIME));
+    assertTrue(
+        !requestLog.isEmpty()
+            && requestLog.stream().allMatch(log -> log.getResponseTime() > MATCHED_RESPONSE_TIME));
   }
 
   @Test
   void shouldReturnMatchedResults_WithHigherResponseTime() throws FileNotFoundException {
-    assertTrue(DataFilterer
-            .filterByCountryWithResponseTimeAboveLimit(openFile(MULTI_LINE_FILE),
-                    MATCHED_COUNTRY_US, UNMATCHED_RESPONSE_TIME)
+    assertTrue(
+        DataFilterer.filterByCountryWithResponseTimeAboveLimit(
+                openFile(MULTI_LINE_FILE), MATCHED_COUNTRY_US, UNMATCHED_RESPONSE_TIME)
             .isEmpty());
   }
 
@@ -58,19 +55,19 @@ class DataFiltererTest {
   void shouldReturnList_WithResponseTimeAboveAverage() throws FileNotFoundException {
     double averageResponseTime = 526;
 
-    List<RequestLog> requestLog = DataFilterer.filterByResponseTimeAboveAverage(openFile(MULTI_LINE_FILE));
+    List<RequestLog> requestLog =
+        DataFilterer.filterByResponseTimeAboveAverage(openFile(MULTI_LINE_FILE));
 
-    assertTrue(!requestLog.isEmpty() &&
-            requestLog
-                    .stream()
-                    .allMatch(log -> log.getResponseTime() > averageResponseTime));
+    assertTrue(
+        !requestLog.isEmpty()
+            && requestLog.stream().allMatch(log -> log.getResponseTime() > averageResponseTime));
   }
 
   void assertCountryFound(List<RequestLog> requestLog, String matchedCountry) {
-    assertTrue(!requestLog.isEmpty() &&
-            requestLog
-                    .stream()
-                    .allMatch(log -> matchedCountry.equalsIgnoreCase(log.getCountryCode())));
+    assertTrue(
+        !requestLog.isEmpty()
+            && requestLog.stream()
+                .allMatch(log -> matchedCountry.equalsIgnoreCase(log.getCountryCode())));
   }
 
   private FileReader openFile(String filename) throws FileNotFoundException {
